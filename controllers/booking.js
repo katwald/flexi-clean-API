@@ -38,6 +38,41 @@ bookingsRouter.post("/", async (request, response) => {
   }
 });
 
+bookingsRouter.put("/:id", async (request, response) => {
+  console.log("request", request.body);
+  const id = request.params.id;
+  const { venueName } = request.body;
+  const { bookingStart, bookingEnd, bookingDescription, cleaningDate } =
+    request.body.bookingStatus;
+  const { cleanedDate, assignedCleaner, cleaningStatus, cleaningHour } =
+    request.body.cleaningStatus;
+
+  const booking = {
+    venueName: venueName,
+    bookingStatus: {
+      bookingStart,
+      bookingEnd,
+      bookingDescription,
+      cleaningDate,
+    },
+    cleaningStatus: {
+      cleanedDate,
+      assignedCleaner,
+      cleaningStatus,
+      cleaningHour,
+    },
+    comments: [],
+  };
+  if (!venueName || !bookingStart || !bookingEnd || !cleaningDate) {
+    response.status(400).end();
+  } else {
+    const updatedBooking = await Booking.findByIdAndUpdate(id, booking, {
+      new: true,
+    });
+    response.json(updatedBooking);
+  }
+});
+
 bookingsRouter.get("/", async (request, response) => {
   const bookings = await Booking.find({});
   response.json(bookings);
@@ -45,7 +80,6 @@ bookingsRouter.get("/", async (request, response) => {
 
 bookingsRouter.get("/:id", async (request, response) => {
   const id = request.params.id;
-  console.log("idddd in route", id);
   const booking = await Booking.findById(id);
   if (!id || !booking) {
     response.status(404).end();
