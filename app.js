@@ -5,6 +5,8 @@ const app = express();
 const cors = require("cors");
 
 const bookingRouter = require("./controllers/booking");
+const userRouter = require("./controllers/user");
+const loginRouter = require("./controllers/signIn");
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
@@ -20,6 +22,8 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/users/", userRouter);
+app.use("/api/login/", loginRouter);
 app.use("/api/bookings/", bookingRouter);
 
 module.exports = app;
