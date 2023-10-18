@@ -11,11 +11,17 @@ const bookingSchema = new mongoose.Schema({
   },
   cleaningStatus: {
     cleanedDate: Date,
-    assignedCleaner: String,
     cleaningStatus: String,
     cleaningHour: Number,
+    assignedCleaner: String,
   },
-  comments: [],
+  user: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
+    },
+  ],
+  comments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Comment" }],
 });
 
 bookingSchema.set("toJSON", {

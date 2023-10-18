@@ -23,13 +23,18 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    unique: true,
     minLength: 3,
   },
   passwordHash: {
     type: String,
     required: true,
   },
+  bookings: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Booking",
+    },
+  ],
 });
 
 userSchema.plugin(uniqueValidator);
