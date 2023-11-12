@@ -3,6 +3,41 @@ const bcrypt = require("bcrypt");
 const loginRouter = require("express").Router();
 const User = require("../models/user");
 
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Authenticate a user and get JWT Bearer token
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: JWT Bearer token generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                   description: JWT Bearer token
+ *       '401':
+ *         description: Unauthorized
+ */
+
 loginRouter.post("/", async (request, response) => {
   const { email, password } = request.body;
   console.log("email", email, password);
@@ -20,13 +55,11 @@ loginRouter.post("/", async (request, response) => {
     id: user._id,
   };
   const token = jwt.sign(userForToken, process.env.SECRET);
-  response
-    .status(200)
-    .send({
-      token,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
+  response.status(200).send({
+    token,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  });
 });
 module.exports = loginRouter;

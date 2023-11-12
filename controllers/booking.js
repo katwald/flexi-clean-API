@@ -7,8 +7,40 @@ const User = require("../models/user");
 const auth = require("../utils/middleWare").auth;
 
 bookingsRouter.get("/test", (request, response) => {
-  response.send("<h1>Hello World!</h1>");
+  response.send(["<h1>Hello World!</h1>", "<h1>Hello World!</h1>"]);
 });
+
+/**
+ * @swagger
+ * /api/bookings:
+ *   post:
+ *     summary: Create a new bookings
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       '201':
+ *         description: Successfully created a new Booking
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *       '401':
+ *         description: Unauthorized
+ *       '400':
+ *         description: Bad request
+ */
 
 // eslint-disable-next-line no-unused-vars
 bookingsRouter.post("/", auth, async (request, response, next) => {
@@ -72,6 +104,42 @@ bookingsRouter.post("/:id", auth, async (request, response) => {
     response.status(201).json(savedComment);
   }
 });
+
+/**
+ * @swagger
+ * /api/bookings/{id}:
+ *   put:
+ *     summary: Update a bookings
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       '200':
+ *         description: Successfully updated a booking
+ *         content:
+ *           application/json:
+ *             schema:
+ *            $ref: '#/components/schemas/Booking'
+ *       '401':
+ *         description: Unauthorized
+ *       '404':
+ *         description: Resource not found
+ *       '400':
+ *         description: Bad request
+ */
 bookingsRouter.put("/:id", auth, async (request, response, next) => {
   // console.log("request", request.body);
   const id = request.params.id;
@@ -144,20 +212,71 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
   next();
 });
 
+/**
+ * @swagger
+ * /api/bookings:
+ *   get:
+ *     summary: get all bookings
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *     responses:
+ *       '200':
+ *         description: Successfully updated a booking
+ *         content:
+ *           application/json:
+ *             schema:
+ *            $ref: '#/components/schemas/Booking'
+ *       '401':
+ *         description: Unauthorized
+ */
 bookingsRouter.get("/", auth, async (request, response, next) => {
-  const bookings = await Booking.find({}).populate("user", {
-    firstName: 1,
-    lastName: 1,
-  });
-  //     .populate("comments", { comment: 1 });
+  const bookings = await Booking.find({})
+    .populate("user", {
+      firstName: 1,
+      lastName: 1,
+    })
+    .populate("comments", { comment: 1 });
   const user = await User.findById(request.user);
   if (!user) {
     response.json(404).end();
   }
-  response.json(bookings);
+  response.json(bookings).status(200);
   next();
 });
 
+/**
+ * @swagger
+ * /api/bookings/{id}:
+ *   get:
+ *     summary: Access a single Booking by ID using Bearer token
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *          $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       '200':
+ *         description: Successfully accessed a single protected resource
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *       '401':
+ *         description: Unauthorized
+ *       '404':
+ *         description: Resource not found
+ */
 bookingsRouter.get("/:id", async (request, response, next) => {
   const id = request.params.id;
   const booking = await Booking.findById(id);
@@ -168,6 +287,29 @@ bookingsRouter.get("/:id", async (request, response, next) => {
   }
   next();
 });
+/**
+ * @swagger
+ * /api/bookings/{id}:
+ *   delete:
+ *     summary: Delete a Booking by ID using Bearer token
+ *     tags:
+ *       - Bookings
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Successfully deleted a booking
+ *       '401':
+ *         description: Unauthorized
+ *       '404':
+ *         description: Resource not found
+ */
 
 bookingsRouter.delete("/:id", auth, async (request, response, next) => {
   const id = request.params.id;

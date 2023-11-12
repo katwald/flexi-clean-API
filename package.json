@@ -19,10 +19,13 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^7.3.0",
         "mongoose-unique-validator": "^4.0.0",
+        "save-dev": "^0.0.1-security",
         "validator": "^13.11.0"
     },
     "devDependencies": {
         "eslint": "^8.43.0",
-        "nodemon": "^2.0.20"
+        "nodemon": "^2.0.20",
+        "swagger-ui-express": "^5.0.0",
+        "swagger-jsdoc": "^6.2.8"
     }
 }

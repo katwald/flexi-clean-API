@@ -8,6 +8,10 @@ const bookingRouter = require("./controllers/booking");
 const userRouter = require("./controllers/user");
 const loginRouter = require("./controllers/signIn");
 const mongoose = require("mongoose");
+// const { PORT } = require("./utils/config.js");
+const options = require("./swagger");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 mongoose.set("strictQuery", false);
 
@@ -22,8 +26,21 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
+// swaggerApiDocs(app, PORT);
 app.use("/api/users/", userRouter);
 app.use("/api/login/", loginRouter);
 app.use("/api/bookings/", bookingRouter);
 
+const specs = swaggerJsdoc(options);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+// function swaggerDocs(app, port) {
+// swagger page
+//Docs in Json format
+//   app.get("docs.json", (req, res) => {
+//     res.setHeader("Content-Type", "application/json");
+//     res.send(specs);
+//   });
+// console.log(`docs available at http://localhost:${port}/docs`);
+// }
 module.exports = app;
