@@ -2,10 +2,10 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Rest API DOCS",
+      title: "FlexiClean API Docs",
       version: "1.0.0",
       description:
-        "This is a simple CRUD API application made with Express and documented with Swagger",
+        "FlexiCleanApp API  made with Express and documented with Swagger",
     },
     servers: [
       {

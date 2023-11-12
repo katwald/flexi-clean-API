@@ -216,18 +216,19 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
  * @swagger
  * /api/bookings:
  *   get:
- *     summary: get all bookings
- *     tags: [Bookings]
+ *     summary: Access all Bookings
+ *     tags:
+ *       - Bookings
  *     security:
  *       - bearerAuth: []
  *     responses:
- *     responses:
  *       '200':
- *         description: Successfully updated a booking
+ *         description: Successfully accessed all protected resources
  *         content:
  *           application/json:
  *             schema:
- *            $ref: '#/components/schemas/Booking'
+ *              $ref: '#/components/schemas/Booking'
+
  *       '401':
  *         description: Unauthorized
  */
