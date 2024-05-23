@@ -2,6 +2,7 @@ const { MONGODB_URI } = require("./utils/config");
 const express = require("express");
 require("express-async-errors");
 const app = express();
+app.use(express.static("build")); // express checks if build directory contains a  requested file and if found returns it.
 const cors = require("cors");
 
 const bookingRouter = require("./controllers/booking");
@@ -43,5 +44,4 @@ app.use("/api/bookings/", bookingRouter);
 //   });
 // console.log(`docs available at http://localhost:${port}/docs`);
 // }
-app.use(express.static("build"));
 module.exports = app;
