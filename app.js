@@ -43,5 +43,5 @@ app.use("/api/bookings/", bookingRouter);
 //   });
 // console.log(`docs available at http://localhost:${port}/docs`);
 // }
-app.use(express.static("dist"));
+app.use(express.static("build"));
 module.exports = app;
