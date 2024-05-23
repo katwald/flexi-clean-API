@@ -43,4 +43,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 //   });
 // console.log(`docs available at http://localhost:${port}/docs`);
 // }
+app.use(express.static("dist"));
 module.exports = app;
