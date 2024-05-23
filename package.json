@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf build && cd ../flexi-clean/ && npm run build && cp -r build ../flexi-clean-backend",
     "dev": "nodemon index.js",
     "start": "node index.js",
     "lint": "eslint .",
