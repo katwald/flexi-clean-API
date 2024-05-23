@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const auth = (request, response, next) => {
   const authorization = request.headers["authorization"];
+  console.log("auther---", request.headers, authorization);
   const extractedToken =
     authorization && authorization.startsWith("Bearer ")
       ? authorization.replace("Bearer ", "")

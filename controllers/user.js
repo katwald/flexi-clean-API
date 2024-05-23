@@ -87,4 +87,9 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
+usersRouter.delete("/:id", async (request, response) => {
+  const id = request.params.id;
+  await User.findByIdAndRemove(id);
+  response.send(204).end();
+});
 module.exports = usersRouter;
