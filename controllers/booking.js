@@ -163,21 +163,22 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
     if (!assignedEmployeeInDB && userIsSupervisor) {
       return assignedCleaner;
       // if no one is assigned both supervisor and employee can assign to themselves.
-    } else if ((!assignedEmployeeInDB && userIsEmployee) || userIsSupervisor) {
+    } else if (
+      (!assignedEmployeeInDB && userIsEmployee) ||
+      (!assignedEmployeeInDB && userIsSupervisor)
+    ) {
       return userId;
       // loggedin employee can remove himself or super visor can remove any one
     } else if (
       (userIsEmployee && assignedEmployeeInDB === userId) ||
       userIsSupervisor
     ) {
-      console.log("step 2");
       return "";
     } else if (
       userIsEmployee &&
       assignedEmployeeInDB &&
       assignedEmployeeInDB !== userId
     ) {
-      console.log("ster 3");
       return assignedEmployeeInDB;
     }
   };
