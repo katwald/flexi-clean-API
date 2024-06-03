@@ -88,7 +88,6 @@ bookingsRouter.post("/:id", auth, async (request, response) => {
   const body = request.body;
   const user = await User.findById(request.user);
   const booking = await Booking.findById(request.params.id);
-  console.log("rea---", request.body);
   const comment = new Comment({
     comment: body.comment,
     userId: user._id.toString(),
@@ -159,6 +158,12 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
     const userId = user._id.toString();
     const assignedEmployeeInDB =
       getBookingFromDB.cleaningStatus.assignedCleaner;
+    console.log(
+      "assiE",
+      assignedEmployeeInDB,
+      "user is supervisor",
+      userIsEmployee
+    );
     // supervisor can assign to any one
     if (!assignedEmployeeInDB && userIsSupervisor) {
       return assignedCleaner;
@@ -167,7 +172,7 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
       (!assignedEmployeeInDB && userIsEmployee) ||
       (!assignedEmployeeInDB && userIsSupervisor)
     ) {
-      return userId;
+      return assignedCleaner;
       // loggedin employee can remove himself or super visor can remove any one
     } else if (
       (userIsEmployee && assignedEmployeeInDB === userId) ||
