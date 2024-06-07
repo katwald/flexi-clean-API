@@ -48,8 +48,13 @@ bookingsRouter.post("/", auth, async (request, response, next) => {
   const userIsSupervisor = user.role === "Supervisor";
 
   const { venueName } = request.body;
-  const { bookingStart, bookingEnd, bookingDescription, cleaningDate } =
-    request.body.bookingStatus;
+  const {
+    bookingStart,
+    bookingEnd,
+    bookingDescription,
+    cleaningDate,
+    cleaningTag,
+  } = request.body.bookingStatus;
   const { cleanedDate, assignedCleaner, cleaningStatus, cleaningHour } =
     request.body.cleaningStatus;
 
@@ -60,6 +65,7 @@ bookingsRouter.post("/", auth, async (request, response, next) => {
       bookingEnd,
       bookingDescription,
       cleaningDate,
+      cleaningTag,
     },
     cleaningStatus: {
       cleanedDate,
@@ -74,6 +80,7 @@ bookingsRouter.post("/", auth, async (request, response, next) => {
     !bookingStart ||
     !bookingEnd ||
     !cleaningDate ||
+    !cleaningTag ||
     !userIsSupervisor
   ) {
     response.status(400).end();
@@ -143,8 +150,13 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
   // console.log("request", request.body);
   const id = request.params.id;
   const { venueName } = request.body;
-  const { bookingStart, bookingEnd, bookingDescription, cleaningDate } =
-    request.body.bookingStatus;
+  const {
+    bookingStart,
+    bookingEnd,
+    bookingDescription,
+    cleaningDate,
+    cleaningTag,
+  } = request.body.bookingStatus;
   const { cleanedDate, cleaningStatus, assignedCleaner, cleaningHour } =
     request.body.cleaningStatus;
   const user = await User.findById(request.user);
@@ -197,6 +209,7 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
           bookingEnd,
           bookingDescription,
           cleaningDate,
+          cleaningTag,
         },
     cleaningStatus: {
       cleanedDate,
