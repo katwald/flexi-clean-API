@@ -7,6 +7,7 @@ const timeSheetSchema = new mongoose.Schema({
   date: Date,
   duration: Number,
   description: String,
+  tag: String,
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "User",
