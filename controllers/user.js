@@ -49,6 +49,7 @@ const User = require("../models/user");
  */
 usersRouter.post("/", async (request, response) => {
   const { firstName, lastName, email, password, role } = request.body;
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   if (password.length < 3) {
@@ -56,7 +57,13 @@ usersRouter.post("/", async (request, response) => {
       .status(400)
       .json("password should be at least 3 or more character");
   } else {
-    const user = new User({ firstName, lastName, email, passwordHash, role });
+    const user = new User({
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      email: email.toLowerCase(),
+      passwordHash,
+      role: role.toLowerCase(),
+    });
     const savedUser = await user.save();
     response.status(201).json(savedUser);
   }

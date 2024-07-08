@@ -45,7 +45,7 @@ bookingsRouter.get("/test", (request, response) => {
 // eslint-disable-next-line no-unused-vars
 bookingsRouter.post("/", auth, async (request, response, next) => {
   const user = await User.findById(request.user);
-  const userIsSupervisor = user.role === "Supervisor";
+  const userIssupervisor = user.role === "supervisor";
 
   const { venueName } = request.body;
   const {
@@ -81,7 +81,7 @@ bookingsRouter.post("/", auth, async (request, response, next) => {
     !bookingEnd ||
     !cleaningDate ||
     !cleaningTag ||
-    !userIsSupervisor
+    !userIssupervisor
   ) {
     response.status(400).end();
   } else {
@@ -163,7 +163,7 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
   // console.log("user", user);
   const getBookingFromDB = await Booking.findById(id);
 
-  const userIsSupervisor = user.role === "Supervisor";
+  const userIssupervisor = user.role === "supervisor";
   const userIsEmployee = user.role === "Employee";
 
   const employeeReadWriteAccess = () => {
@@ -177,18 +177,18 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
       userIsEmployee
     );
     // supervisor can assign to any one
-    if (!assignedEmployeeInDB && userIsSupervisor) {
+    if (!assignedEmployeeInDB && userIssupervisor) {
       return assignedCleaner;
       // if no one is assigned both supervisor and employee can assign to themselves.
     } else if (
       (!assignedEmployeeInDB && userIsEmployee) ||
-      (!assignedEmployeeInDB && userIsSupervisor)
+      (!assignedEmployeeInDB && userIssupervisor)
     ) {
       return assignedCleaner;
       // loggedin employee can remove himself or super visor can remove any one
     } else if (
       (userIsEmployee && assignedEmployeeInDB === userId) ||
-      userIsSupervisor
+      userIssupervisor
     ) {
       return "";
     } else if (
@@ -201,8 +201,8 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
   };
 
   const booking = {
-    venueName: !userIsSupervisor ? getBookingFromDB.venueName : venueName,
-    bookingStatus: !userIsSupervisor
+    venueName: !userIssupervisor ? getBookingFromDB.venueName : venueName,
+    bookingStatus: !userIssupervisor
       ? getBookingFromDB.bookingStatus
       : {
           bookingStart,
@@ -220,7 +220,7 @@ bookingsRouter.put("/:id", auth, async (request, response, next) => {
     comments: [],
     user: [user.id],
   };
-  if (!user && !(userIsEmployee && userIsSupervisor)) {
+  if (!user && !(userIsEmployee && userIssupervisor)) {
     response.status(400).end();
   } else {
     const updatedBooking = await Booking.findByIdAndUpdate(id, booking, {
@@ -334,9 +334,9 @@ bookingsRouter.get("/:id", async (request, response, next) => {
 bookingsRouter.delete("/:id", auth, async (request, response, next) => {
   const id = request.params.id;
   const user = await User.findById(request.user);
-  const userIsSupervisor = user.role === "Supervisor";
+  const userIssupervisor = user.role === "supervisor";
 
-  if (!id || !userIsSupervisor) {
+  if (!id || !userIssupervisor) {
     response.status(404).end();
   } else {
     await Booking.findByIdAndRemove(id);

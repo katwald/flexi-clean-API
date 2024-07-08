@@ -35,6 +35,12 @@ const userSchema = new mongoose.Schema({
       ref: "Booking",
     },
   ],
+  timeSheet: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "TimeSheet",
+    },
+  ],
 });
 
 userSchema.plugin(uniqueValidator);

@@ -9,6 +9,7 @@ const bookingRouter = require("./controllers/booking");
 const userRouter = require("./controllers/user");
 const loginRouter = require("./controllers/signIn");
 const mongoose = require("mongoose");
+const timeSheetRouter = require("./controllers/timeSheet");
 // const { PORT } = require("./utils/config.js");
 // const options = require("./swagger");
 // const swaggerJsdoc = require("swagger-jsdoc");
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use("/api/users/", userRouter);
 app.use("/api/login/", loginRouter);
 app.use("/api/bookings/", bookingRouter);
+app.use("/api/time-sheet", timeSheetRouter);
 
 // const specs = swaggerJsdoc(options);
 
